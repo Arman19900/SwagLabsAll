@@ -1,43 +1,61 @@
 package com.company.swaglabs.pages;
 import com.company.swaglabs.constants.LogInData;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.testng.Assert;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import java.util.concurrent.TimeUnit;
 
+import static com.company.swaglabs.wrappedelement.MyElement.*;
+import static com.company.swaglabs.constants.LogInData.*;
+
 public class LoginPage {
-        WebDriver driver;
-        WebElement loginPageLogo;
-        WebElement loginPageIcon;
-        WebElement userNameSpace;
-        WebElement passWordSpace;
-        WebElement loginButton;
+        private WebDriver driver;
+        @FindBy(className = "login_logo")
+        private WebElement logo;
+        @FindBy(className = "bot_column")
+        private WebElement icon;
+        @FindBy(id="user-name")
+        private WebElement userNameSpace;
+        @FindBy(id="password")
+        private WebElement passWordSpace;
+        @FindBy(id="login-button")
+        private WebElement loginButton;
+        @FindBy (className="error-message-container")
+        private WebElement errorMessage;
+        @FindBy(className = "fa-times")
+        private WebElement closeErrorButton;
 
-        LoginPage(WebDriver driver){
+        public LoginPage(WebDriver driver){
+
                 this.driver = driver;
-                driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-                loginPageLogo = this.driver.findElement(By.className("login_logo"));
-                loginPageIcon = this.driver.findElement(By.className("bot_column"));
-                passWordSpace = this.driver.findElement(By.id("password"));
-                userNameSpace = this.driver.findElement(By.id("user-name"));
-                loginButton = this.driver.findElement(By.id("login-button"));
-        }
-
-        public  void checkPageElements() {
-                Assert.assertTrue(this.loginPageIcon.isDisplayed(), "The login page icon is not displayed");
-                Assert.assertTrue(this.loginPageLogo.isDisplayed(), "Login page logo is not displayed");
-                Assert.assertTrue(this.userNameSpace.isDisplayed(), "Username space is not displayed");
-                Assert.assertTrue(this.passWordSpace.isDisplayed(), "Password space is not displayed");
-                Assert.assertTrue(this.loginButton.isDisplayed(), "Login button is not displayed");
-        }
-
-        public void logIn(){
-                this.userNameSpace.sendKeys(LogInData.STANDARD_USER.toString());
-                this.passWordSpace.sendKeys(LogInData.PASSWORD.toString());
-                this.loginButton.click();
+                this.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+                PageFactory.initElements(driver, this);
         }
 
 
+        public WebElement getIcon() {
+                return icon;
+        }
+
+        public void logIn(LogInData userName){
+                fill(this.userNameSpace, userName.toString());
+                fill(this.passWordSpace, PASSWORD.toString());
+                loginButton.click();
+        }
+
+        public WebElement getErrorButton() {
+                return errorMessage;
+        }
+
+        public WebElement getLogo(){
+                return this.logo;
+        }
+
+
+        public WebElement closeErrorMessage(){
+                return closeErrorButton;
+        }
+      //  public boolean is
 
 }

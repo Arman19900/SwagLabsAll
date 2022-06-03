@@ -3,6 +3,7 @@ package com.company.swaglabs.pages;
 import com.company.swaglabs.components.Footer;
 import com.company.swaglabs.components.Header;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 public class BasePage {
     private WebDriver driver;
@@ -11,10 +12,11 @@ public class BasePage {
 
 
 
+
     public BasePage(WebDriver driver){
         this.driver = driver;
-        header = new Header(this.driver);
-        footer = new Footer(this.driver);
+        this.header = new Header(this.driver);
+        this.footer = new Footer(this.driver);
     }
 
     public Header getHeader() {
@@ -24,4 +26,6 @@ public class BasePage {
     public Footer getFooter() {
         return footer;
     }
+
+
 }

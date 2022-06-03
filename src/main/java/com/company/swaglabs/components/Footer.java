@@ -1,22 +1,24 @@
 package com.company.swaglabs.components;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
 public class Footer {
     private WebDriver driver;
+    @FindBy(css = "[target='_blank']")
     private List<WebElement> socialLinks;
+    @FindBy(className="footer_robot")
     private WebElement footerRobot;
+    @FindBy(className="footer_copy")
     private WebElement footerText;
 
     public Footer (WebDriver driver){
         this.driver = driver;
-        this.socialLinks = driver.findElements(By.cssSelector("[target='_blank']"));
-        this.footerRobot = driver.findElement(By.className("footer_robot"));
-        this.footerText = driver.findElement(By.className("footer_copy"));
+        PageFactory.initElements(this.driver, this);
     }
 
     public void clickOnTwitter(){

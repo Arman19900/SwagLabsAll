@@ -1,37 +1,57 @@
+import com.company.swaglabs.pages.HomePage;
 import com.company.swaglabs.pages.LoginPage;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.concurrent.TimeUnit;
+import static com.company.swaglabs.wrappedelement.MyElement.*;
+import static com.company.swaglabs.constants.LogInData.*;
 
-public class LogInTest {
-    WebDriver driver;
-    @BeforeMethod
-    public void setup() throws InterruptedException {
-        System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver");
-        driver = new ChromeDriver();
-        driver.get("https://www.saucedemo.com/");
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+public class LogInTest extends BaseTest{
+
+
+    @Test
+    public void checkLogoAndIcon(){
+        LoginPage loginPage = new LoginPage(getDriver());
+            Assert.assertTrue(isDisplayed(loginPage.getLogo()), "The logo is not displayed");
+            Assert.assertTrue(isDisplayed(loginPage.getIcon()), "The icon is not displayed");
     }
 
 
     @Test
-    public void checkElements() throws InterruptedException {
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-
+    public void standardLogin() {
+        LoginPage loginPage = new LoginPage(getDriver());
+            loginPage.logIn(STANDARD_USER);
+            HomePage homePage = new HomePage(getDriver());
+            Assert.assertTrue(isDisplayed(homePage.getItems(0)), "The page is not logged in.");
 
     }
     @Test
-    public void login(){
+    public void lockedOutUserLogin() {
+        LoginPage loginPage = new LoginPage(getDriver());
+        loginPage.logIn(LOCKED_OUT_USER);
+        Assert.assertEquals(loginPage.getErrorButton().getText(), "Epic sadface: Sorry, this user has been locked out.");
+        act.click(loginPage.closeErrorMessage());
+
+    }
+    @Test
+    public void problemUserLogin(){
+        LoginPage loginPage = new LoginPage(getDriver());
+        loginPage.logIn(PROBLEM_USER);
+        HomePage homePage = new HomePage(getDriver());
+        Assert.assertTrue(isDisplayed(homePage.getItems(0)), "The page is not logged in");
+
+    }
+    @Test
+    public void performanceGlitchUserLogin(){
+        LoginPage loginPage = new LoginPage(getDriver());
+        loginPage.logIn(PERFORMANCE_GLITCH_USER);
+        HomePage homePage = new HomePage(getDriver());
+        Assert.assertTrue(isDisplayed(homePage.getItems(0)), "The page is not logged in");
 
     }
 
-    @AfterMethod
-    public void exit() throws InterruptedException {
-        driver.quit();
-    }
+
+
+
+
 }
